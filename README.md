@@ -1,73 +1,112 @@
-# React + TypeScript + Vite
+# 📋 Painel de Gestão de Usuários  (React + TypeScript)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicação web para gerenciamento de usuários com listagem, criação, edição e exclusão, consumindo uma API mock externa.
 
-Currently, two official plugins are available:
+Projeto desenvolvido como desafio técnico front-end.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Funcionalidades
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+### ✅ Listagem de usuários
+- Busca por nome
+- Ordenação alfabética
+- Indicador visual de status (ativo / inativo)
 
-## Expanding the ESLint configuration
+### ✅ Cadastro de usuário
+- Modal reutilizável
+- Validação obrigatória:
+  - Nome
+  - Email
+- Validação de formato de email
+- Status selecionável (ativo ou inativo)
+- Integração com API mock
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### ✅ Edição de usuário
+- Reutiliza o mesmo modal do cadastro
+- Campos pré-preenchidos
+- Atualização via API
+- Atualização imediata da listagem (estado global local)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### ✅ Exclusão de usuário
+- Confirmação antes de excluir
+- Chamada DELETE na API
+- Atualização imediata da listagem
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🔌 API utilizada
+
+API pública mock:
+```
+https://jsonplaceholder.typicode.com/users
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### ⚠️ Importante
+A API é simulada e **não persiste alterações reais**.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Isso significa que:
+- dados criados não ficam salvos no servidor
+- edição e exclusão são simuladas
+- o estado real é mantido apenas no frontend
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## 🛠️ Tecnologias utilizadas
+
+- React
+- TypeScript
+- Vite
+- Material UI
+- Axios
+- CSS Modules
+
+---
+
+## 📁 Estrutura do projeto
+
+```
+src/
+  components/
+    Formulario/
+      form.tsx
+    UserList/
+      user-list.tsx
+      user-list.module.css
+
+  services/
+    user-service.ts
+
+  types/
+    User.ts
+```
+
+---
+
+## 🔄 Fluxo de dados
+
+1. Aplicação carrega usuários da API (GET)
+2. Dados armazenados em estado local global da tela
+3. Operações CRUD chamam a API mock
+4. Estado local é atualizado manualmente para refletir mudanças
+
+---
+
+## ▶️ Como rodar o projeto
+
+### clonar o repositório
+```
+https://github.com/yurirps/desafio-zucchetti.git
+```
+
+### Instalar dependências
+
+```bash
+npm install
+```
+
+### Executar ambiente de desenvolvimento
+
+```bash
+npm run dev
 ```
