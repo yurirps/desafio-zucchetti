@@ -1,9 +1,10 @@
 import "./App.css";
+import UsersList from "./components/Usuarios/user-list";
 
 function App() {
   return (
     <>
-      <h1>Painel de Gestão de Usuários</h1>
+      <UsersList />
     </>
   );
 }
