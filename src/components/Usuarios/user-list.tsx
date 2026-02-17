@@ -31,6 +31,7 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
+import BtnToggle from "../Button/btn-toggle";
 
 export default function UsersList() {
   const [users, setUsers] = useState<User[]>([]);
@@ -58,31 +59,29 @@ export default function UsersList() {
   }, []);
 
   // CREATE
- 
-const handleAddUser = async (userData: User) => {
-  try {
-    const payload: Omit<User, "id"> = {
-      name: userData.name,
-      email: userData.email,
-      status: userData.status,
-    };
 
-    const createdUser = await createUser(payload);
+  const handleAddUser = async (userData: User) => {
+    try {
+      const payload: Omit<User, "id"> = {
+        name: userData.name,
+        email: userData.email,
+        status: userData.status,
+      };
 
-    const userWithStatus = {
-      ...createdUser,
-      status: userData.status,
-    };
+      const createdUser = await createUser(payload);
 
-    setUsers((prev) => [...prev, userWithStatus]);
-    setOpenForm(false);
-    setSelectedUser(null);
-  } catch (error) {
-    console.error("Erro ao criar usuário", error);
-  }
-};
+      const userWithStatus = {
+        ...createdUser,
+        status: userData.status,
+      };
 
-
+      setUsers((prev) => [...prev, userWithStatus]);
+      setOpenForm(false);
+      setSelectedUser(null);
+    } catch (error) {
+      console.error("Erro ao criar usuário", error);
+    }
+  };
 
   // UPDATE
   const handleUpdateUser = async (updatedUser: User) => {
@@ -108,7 +107,6 @@ const handleAddUser = async (userData: User) => {
     }
   };
 
-
   // DELETE
   const handleDelete = async (id: number) => {
     const confirmDelete = window.confirm(
@@ -126,20 +124,18 @@ const handleAddUser = async (userData: User) => {
     }
   };
 
-
   // Editar
   const handleEdit = (user: User) => {
     setSelectedUser(user);
     setOpenForm(true);
   };
 
-  
   //Ordenação
-    const handleSortByName = () => {
+  const handleSortByName = () => {
     setOrder((prev) => (prev === "asc" ? "desc" : "asc"));
   };
-  
-  // Busca  
+
+  // Busca
   const searchUsers = users.filter((user) =>
     user.name.toLowerCase().includes(search.toLowerCase()),
   );
@@ -165,17 +161,19 @@ const handleAddUser = async (userData: User) => {
         <Paper elevation={3} sx={{ p: 2 }}>
           <Box className={styles.btn}>
             <Typography variant="h5">Lista de Usuários</Typography>
-
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => {
-                setSelectedUser(null);
-                setOpenForm(true);
-              }}
-            >
-              Cadastrar novo usuário
-            </Button>
+            <div>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => {
+                  setSelectedUser(null);
+                  setOpenForm(true);
+                }}
+              >
+                Cadastrar novo usuário
+              </Button>
+              <BtnToggle />
+            </div>
           </Box>
 
           <TextField
