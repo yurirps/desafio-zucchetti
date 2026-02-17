@@ -92,6 +92,13 @@ src/
 
 ---
 
+## 🧪 Testes
+
+### Testes unitários
+- Renderização da listagem
+- Criação de usuário
+- Atualização do estado global
+
 ## ▶️ Como rodar o projeto
 
 ### clonar o repositório
@@ -109,4 +116,10 @@ npm install
 
 ```bash
 npm run dev
+```
+
+### Rodar os testes
+
+```bash
+npm run test
 ```
