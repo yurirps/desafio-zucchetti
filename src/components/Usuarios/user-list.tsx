@@ -16,14 +16,19 @@ import {
   TableRow,
   Chip,
   IconButton,
+  TableSortLabel,
+  TextField,
 } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 
 export default function UsersList() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  // ordenação
+  const [order, setOrder] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -45,10 +50,23 @@ export default function UsersList() {
     // deleteUser()
   };
 
-    const handleEdit = (id: number) => {
-    console.log("Editar Usuario:", id);
-    // updateUser()
+  // alternar ordenação
+  const handleSortByName = () => {
+    setOrder((prev) => (prev === "asc" ? "desc" : "asc"));
   };
+
+  // filtrar user
+  const searchUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  // lista ordenada
+  const sortedUsers = [...searchUsers].sort((a, b) => {
+    if (order === "asc") {
+      return a.name.localeCompare(b.name);
+    }
+    return b.name.localeCompare(a.name);
+  });
 
   if (loading) {
     return (
@@ -64,20 +82,38 @@ export default function UsersList() {
         <Typography variant="h5" gutterBottom>
           Lista de Usuários
         </Typography>
+        <TextField
+          label="Buscar por nome"
+          variant="outlined"
+          size="small"
+          fullWidth
+          sx={{ mb: 2 }}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
         <TableContainer>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>
-                  <strong>Nome</strong>
+                  <TableSortLabel
+                    active
+                    direction={order}
+                    onClick={handleSortByName}
+                  >
+                    <strong>Nome</strong>
+                  </TableSortLabel>
                 </TableCell>
+
                 <TableCell>
                   <strong>Email</strong>
                 </TableCell>
+
                 <TableCell>
                   <strong>Status</strong>
                 </TableCell>
+
                 <TableCell align="center">
                   <strong>Ações</strong>
                 </TableCell>
@@ -85,7 +121,7 @@ export default function UsersList() {
             </TableHead>
 
             <TableBody>
-              {users.map((user) => (
+              {sortedUsers.map((user) => (
                 <TableRow key={user.id} hover>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
@@ -99,12 +135,6 @@ export default function UsersList() {
                   </TableCell>
 
                   <TableCell align="center">
-                    <IconButton
-                      color="primary"
-                      onClick={() => handleEdit(user.id)}
-                    >
-                      <EditIcon />
-                    </IconButton>
                     <IconButton
                       color="error"
                       onClick={() => handleDelete(user.id)}

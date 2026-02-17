@@ -5,7 +5,6 @@ const api = axios.create({
   baseURL: "https://jsonplaceholder.typicode.com/",
 });
 
-
 //GET
 export const getUsers = async (): Promise<User[]> => {
   const response = await api.get("/users");
