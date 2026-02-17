@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -15,13 +15,29 @@ interface Props {
   open: boolean;
   onClose: () => void;
   onSave: (user: User) => void;
+  initialData?: User | null;
 }
 
-export default function Form({ open, onClose, onSave }: Props) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"active" | "inactive">("active");
+interface FormState {
+  name: string;
+  email: string;
+  status: "active" | "inactive";
+}
 
+export default function Form({
+  open,
+  onClose,
+  onSave,
+  initialData,
+}: Props) {
+  
+  const [formData, setFormData] = useState<FormState>({
+    name: "",
+    email: "",
+    status: "active",
+  });
+  
+  // VALIDATION STATE  
   const [errors, setErrors] = useState({
     name: false,
     email: false,
@@ -30,14 +46,42 @@ export default function Form({ open, onClose, onSave }: Props) {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const handleSubmit = () => {
-    const newErrors = {
-      name: name.trim() === "",
-      email: email.trim() === "",
-      emailInvalid: !emailRegex.test(email),
+  useEffect(() => {
+    if (!open) return;
+
+    setFormData(
+      initialData ?? {
+        name: "",
+        email: "",
+        status: "active",
+      }
+    );
+
+    setErrors({
+      name: false,
+      email: false,
+      emailInvalid: false,
+    });
+  }, [initialData, open]);
+
+  const handleChange =
+    (field: keyof FormState) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData({
+        ...formData,
+        [field]: e.target.value,
+      });
     };
 
-    // se estiver vazio, não precisa validar formato
+  
+  // SUBMIT  
+  const handleSubmit = () => {
+    const newErrors = {
+      name: formData.name.trim() === "",
+      email: formData.email.trim() === "",
+      emailInvalid: !emailRegex.test(formData.email),
+    };
+
     if (newErrors.email) {
       newErrors.emailInvalid = false;
     }
@@ -47,37 +91,27 @@ export default function Form({ open, onClose, onSave }: Props) {
     if (newErrors.name || newErrors.email || newErrors.emailInvalid) return;
 
     const newUser: User = {
-      id: Date.now(),
-      name,
-      email,
-      status,
+      id: initialData ? initialData.id : Date.now(),
+      ...formData,
     };
 
     onSave(newUser);
     onClose();
-
-    // reset
-    setName("");
-    setEmail("");
-    setStatus("active");
-    setErrors({
-      name: false,
-      email: false,
-      emailInvalid: false,
-    });
   };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
-      <DialogTitle>Novo usuário</DialogTitle>
+      <DialogTitle>
+        {initialData ? "Editar usuário" : "Novo usuário"}
+      </DialogTitle>
 
       <DialogContent>
         <TextField
           label="Nome"
           fullWidth
           margin="normal"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formData.name}
+          onChange={handleChange("name")}
           error={errors.name}
           helperText={errors.name && "Nome é obrigatório"}
         />
@@ -86,8 +120,8 @@ export default function Form({ open, onClose, onSave }: Props) {
           label="Email"
           fullWidth
           margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={formData.email}
+          onChange={handleChange("email")}
           error={errors.email || errors.emailInvalid}
           helperText={
             errors.email
@@ -103,10 +137,8 @@ export default function Form({ open, onClose, onSave }: Props) {
           label="Status"
           fullWidth
           margin="normal"
-          value={status}
-          onChange={(e) =>
-            setStatus(e.target.value as "active" | "inactive")
-          }
+          value={formData.status}
+          onChange={handleChange("status")}
         >
           <MenuItem value="active">Ativo</MenuItem>
           <MenuItem value="inactive">Inativo</MenuItem>
@@ -115,8 +147,9 @@ export default function Form({ open, onClose, onSave }: Props) {
 
       <DialogActions>
         <Button onClick={onClose}>Cancelar</Button>
+
         <Button variant="contained" onClick={handleSubmit}>
-          Salvar
+          {initialData ? "Atualizar" : "Salvar"}
         </Button>
       </DialogActions>
     </Dialog>

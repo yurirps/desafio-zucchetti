@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getUsers } from "../../services/user-service";
+import {
+  getUsers,
+  createUser,
+  updateUser,
+  deleteUser,
+} from "../../services/user-service";
 import type { User } from "../../types/User";
 import styles from "./user-list.module.css";
 import Form from "../Formulario/form";
@@ -32,6 +37,7 @@ export default function UsersList() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [openForm, setOpenForm] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   // ordenação
   const [order, setOrder] = useState<"asc" | "desc">("asc");
@@ -51,32 +57,93 @@ export default function UsersList() {
     fetchUsers();
   }, []);
 
-  const handleAddUser = (newUser: User) => {
-    setUsers((prev) => [...prev, newUser]);
+  // CREATE
+ 
+const handleAddUser = async (userData: User) => {
+  try {
+    const payload: Omit<User, "id"> = {
+      name: userData.name,
+      email: userData.email,
+      status: userData.status,
+    };
+
+    const createdUser = await createUser(payload);
+
+    const userWithStatus = {
+      ...createdUser,
+      status: userData.status,
+    };
+
+    setUsers((prev) => [...prev, userWithStatus]);
     setOpenForm(false);
+    setSelectedUser(null);
+  } catch (error) {
+    console.error("Erro ao criar usuário", error);
+  }
+};
+
+
+
+  // UPDATE
+  const handleUpdateUser = async (updatedUser: User) => {
+    try {
+      await updateUser(updatedUser);
+
+      setUsers((prev) =>
+        prev.map((user) => (user.id === updatedUser.id ? updatedUser : user)),
+      );
+
+      setOpenForm(false);
+      setSelectedUser(null);
+    } catch (error) {
+      console.error("Erro ao atualizar usuário", error);
+    }
   };
 
-  const handleDelete = (id: number) => {
-    console.log("Deletar usuário:", id);
-    // deleteUser()
+  const handleSaveUser = (user: User) => {
+    if (selectedUser) {
+      handleUpdateUser(user);
+    } else {
+      handleAddUser(user);
+    }
   };
 
-  const handleEdit = (id: number) => {
-    console.log("Editar usuário:", id);
-    // updateUser()
+
+  // DELETE
+  const handleDelete = async (id: number) => {
+    const confirmDelete = window.confirm(
+      "Tem certeza que deseja excluir este usuário?",
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await deleteUser(id);
+
+      setUsers((prev) => prev.filter((user) => user.id !== id));
+    } catch (error) {
+      console.error("Erro ao deletar usuário", error);
+    }
   };
 
-  // alternar ordenação
-  const handleSortByName = () => {
+
+  // Editar
+  const handleEdit = (user: User) => {
+    setSelectedUser(user);
+    setOpenForm(true);
+  };
+
+  
+  //Ordenação
+    const handleSortByName = () => {
     setOrder((prev) => (prev === "asc" ? "desc" : "asc"));
   };
-
-  // filtrar user
+  
+  // Busca  
   const searchUsers = users.filter((user) =>
     user.name.toLowerCase().includes(search.toLowerCase()),
   );
 
-  // lista ordenada
   const sortedUsers = [...searchUsers].sort((a, b) => {
     if (order === "asc") {
       return a.name.localeCompare(b.name);
@@ -102,7 +169,10 @@ export default function UsersList() {
             <Button
               variant="contained"
               startIcon={<AddIcon />}
-              onClick={() => setOpenForm(true)}
+              onClick={() => {
+                setSelectedUser(null);
+                setOpenForm(true);
+              }}
             >
               Cadastrar novo usuário
             </Button>
@@ -163,7 +233,7 @@ export default function UsersList() {
                     <TableCell align="center">
                       <IconButton
                         color="primary"
-                        onClick={() => handleEdit(user.id)}
+                        onClick={() => handleEdit(user)}
                       >
                         <EditIcon />
                       </IconButton>
@@ -182,10 +252,15 @@ export default function UsersList() {
           </TableContainer>
         </Paper>
       </Container>
+
       <Form
         open={openForm}
-        onClose={() => setOpenForm(false)}
-        onSave={handleAddUser}
+        onClose={() => {
+          setOpenForm(false);
+          setSelectedUser(null);
+        }}
+        onSave={handleSaveUser}
+        initialData={selectedUser}
       />
     </>
   );
