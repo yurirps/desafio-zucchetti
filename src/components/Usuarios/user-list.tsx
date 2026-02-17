@@ -21,6 +21,7 @@ import {
 } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 export default function UsersList() {
   const [users, setUsers] = useState<User[]>([]);
@@ -48,6 +49,11 @@ export default function UsersList() {
   const handleDelete = (id: number) => {
     console.log("Deletar usuário:", id);
     // deleteUser()
+  };
+
+  const handleEdit = (id: number) => {
+    console.log("Editar usuário:", id);
+    // updateUser()
   };
 
   // alternar ordenação
@@ -135,6 +141,13 @@ export default function UsersList() {
                   </TableCell>
 
                   <TableCell align="center">
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleEdit(user.id)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+
                     <IconButton
                       color="error"
                       onClick={() => handleDelete(user.id)}
