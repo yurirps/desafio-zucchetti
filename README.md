@@ -4,6 +4,8 @@ Aplicação web para gerenciamento de usuários com listagem, criação, ediçã
 
 Projeto desenvolvido como desafio técnico front-end.
 
+Link do deploy -> https://zucchetti-user-management.vercel.app/
+
 ---
 
 ## 🚀 Funcionalidades
@@ -32,6 +34,9 @@ Projeto desenvolvido como desafio técnico front-end.
 - Confirmação antes de excluir
 - Chamada DELETE na API
 - Atualização imediata da listagem
+
+### ✅ Tema
+- Dark - Light
 
 ---
 
@@ -68,17 +73,27 @@ Isso significa que:
 ```
 src/
   components/
+    Button/
+      btn-toggle.tsx
     Formulario/
       form.tsx
     UserList/
       user-list.tsx
       user-list.module.css
-
-  services/
-    user-service.ts
-
-  types/
-    User.ts
+    hooks/
+      useThemeMode.ts
+    services/
+      user-service.ts
+    test/
+      CreateUser.test.tsx
+      setup.ts
+      User-interaction.test.tsx
+      UserList.test.tsx
+    theme/
+      themeContext.ts
+      themeProvider.ts
+    types/
+      User.ts
 ```
 
 ---
@@ -123,3 +138,13 @@ npm run dev
 ```bash
 npm run test
 ```
+
+<img width="907" height="840" alt="image" src="https://github.com/user-attachments/assets/c1718832-ad1e-4247-8410-f11e94b78901" />
+
+<img width="866" height="855" alt="image" src="https://github.com/user-attachments/assets/6c075b02-2d57-4807-a442-4c7fb2e9254e" />
+
+<img width="886" height="708" alt="image" src="https://github.com/user-attachments/assets/9c017f7c-f140-4f31-b2bf-d9fced2ef4d7" />
+
+<img width="927" height="281" alt="image" src="https://github.com/user-attachments/assets/3eeb6a86-71ce-43f0-ad19-ed664324c188" />
+
+
