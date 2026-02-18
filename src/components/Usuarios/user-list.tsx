@@ -159,9 +159,10 @@ export default function UsersList() {
     <>
       <Container maxWidth="md" sx={{ mt: 4 }}>
         <Paper elevation={3} sx={{ p: 2 }}>
-          <Box className={styles.btn}>
-            <Typography variant="h5">Gestão de Usuários </Typography>
-            <div>
+          <Box className={styles.container}>
+            <Typography variant="h5">Gestão de Usuários</Typography>
+
+            <div className={styles.controls}>
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
@@ -170,8 +171,9 @@ export default function UsersList() {
                   setOpenForm(true);
                 }}
               >
-                Cadastrar novo usuário
+                Cadastrar
               </Button>
+
               <BtnToggle />
             </div>
           </Box>

@@ -1,6 +1,20 @@
-.btn {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+/* botão + toggle lado a lado */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .controls button {
+   max-width: 130px;
+   white-space: nowrap;
+  }
 }
