@@ -160,7 +160,7 @@ export default function UsersList() {
       <Container maxWidth="md" sx={{ mt: 4 }}>
         <Paper elevation={3} sx={{ p: 2 }}>
           <Box className={styles.btn}>
-            <Typography variant="h5">Lista de Usuários</Typography>
+            <Typography variant="h5">Gestão de Usuários </Typography>
             <div>
               <Button
                 variant="contained"

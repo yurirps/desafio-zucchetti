@@ -5,7 +5,6 @@ import UsersList from "../components/Usuarios/user-list";
 import * as userService from "../services/user-service";
 import type { User } from "../types/User";
 
-
 // Mock das APIs
 vi.mock("../services/user-service.ts");
 
@@ -32,7 +31,9 @@ describe("Integração - interação simulada do usuário", () => {
     await waitFor(() => expect(screen.getByText("Maria")).toBeInTheDocument());
 
     // clica em "Cadastrar novo usuário"
-    const addButton = screen.getByRole("button", { name: /cadastrar novo usuário/i });
+    const addButton = screen.getByRole("button", {
+      name: /cadastrar novo usuário/i,
+    });
     await user.click(addButton);
 
     // preenche o formulário

@@ -24,7 +24,9 @@ describe("UsersList - atualização de estado global", () => {
     vi.mocked(userService.getUsers).mockResolvedValue(mockUsers);
 
     // PUT update
-    vi.mocked(userService.updateUser).mockImplementation(async (updated) => updated);
+    vi.mocked(userService.updateUser).mockImplementation(
+      async (updated) => updated,
+    );
 
     render(<UsersList />);
 
@@ -35,8 +37,8 @@ describe("UsersList - atualização de estado global", () => {
 
     // clicar no botão editar (primeiro botão de edição)
     const editButtons = screen.getAllByRole("button");
-    const editButton = editButtons.find(btn =>
-      btn.querySelector("svg[data-testid='EditIcon']")
+    const editButton = editButtons.find((btn) =>
+      btn.querySelector("svg[data-testid='EditIcon']"),
     );
 
     await user.click(editButton!);

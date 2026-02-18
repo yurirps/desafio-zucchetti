@@ -28,7 +28,7 @@ describe("UsersList - criação de usuário", () => {
 
     // abre modal
     await user.click(
-      screen.getByRole("button", { name: /cadastrar novo usuário/i })
+      screen.getByRole("button", { name: /cadastrar novo usuário/i }),
     );
 
     // preenche nome

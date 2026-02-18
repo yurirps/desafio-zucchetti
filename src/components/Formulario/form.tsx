@@ -24,20 +24,14 @@ interface FormState {
   status: "active" | "inactive";
 }
 
-export default function Form({
-  open,
-  onClose,
-  onSave,
-  initialData,
-}: Props) {
-  
+export default function Form({ open, onClose, onSave, initialData }: Props) {
   const [formData, setFormData] = useState<FormState>({
     name: "",
     email: "",
     status: "active",
   });
-  
-  // VALIDATION STATE  
+
+  // VALIDATION STATE
   const [errors, setErrors] = useState({
     name: false,
     email: false,
@@ -54,7 +48,7 @@ export default function Form({
         name: "",
         email: "",
         status: "active",
-      }
+      },
     );
 
     setErrors({
@@ -65,16 +59,14 @@ export default function Form({
   }, [initialData, open]);
 
   const handleChange =
-    (field: keyof FormState) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (field: keyof FormState) => (e: React.ChangeEvent<HTMLInputElement>) => {
       setFormData({
         ...formData,
         [field]: e.target.value,
       });
     };
 
-  
-  // SUBMIT  
+  // SUBMIT
   const handleSubmit = () => {
     const newErrors = {
       name: formData.name.trim() === "",
@@ -127,8 +119,8 @@ export default function Form({
             errors.email
               ? "Email é obrigatório"
               : errors.emailInvalid
-              ? "Formato de email inválido"
-              : ""
+                ? "Formato de email inválido"
+                : ""
           }
         />
 
